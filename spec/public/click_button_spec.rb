@@ -491,4 +491,16 @@ describe "click_button" do
     webrat_session.should_receive(:get).with("/login", "user" => {"email" => ""})
     click_button "Login"
   end
+
+  it "should provide a default x and y coordinate of 0,0 when clicking an image" do
+    with_html <<-HTML
+      <html>
+      <form method="get" action="/login">
+        <input type="image" name="login" value="Login" />
+      </form>
+      </html>
+    HTML
+    webrat_session.should_receive(:get).with("/login", "login" => "Login", "login.x" => 0, "login.y" => 0)
+    click_button("Login")
+  end
 end

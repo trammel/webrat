@@ -55,7 +55,7 @@ module Webrat
         when "reset"    then ResetField
         when "submit"   then ButtonField
         when "button"   then ButtonField
-        when "image"    then ButtonField
+        when "image"    then ImageField
         else  TextField
         end
       end
@@ -225,6 +225,28 @@ module Webrat
       form.submit
     end
 
+  end
+
+  class ImageField < ButtonField
+    def self.xpath_search
+      [".//input[@type = 'image']"]
+    end
+
+    def to_param
+       params = super
+       params = {} if params.nil?
+       if @clickedX && @clickedY
+         params["#{name}.x"] = @clickedX
+         params["#{name}.y"] = @clickedY
+       end
+       return params
+    end
+
+    def click x=0, y=0
+      @clickedX = x
+      @clickedY = y
+      super()
+    end
   end
 
   class HiddenField < Field #:nodoc:
